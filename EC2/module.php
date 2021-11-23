@@ -127,7 +127,7 @@ class EC2 extends IPSModule {
 		
 		$instances = $ec2Client->DescribeInstanceStatus();
 		
-		var_dump ($instnaces);
+		var_dump ($instances);
 	}
 	
 	
