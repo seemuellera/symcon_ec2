@@ -126,16 +126,12 @@ class EC2 extends IPSModule {
 			],
 		]);
 		
-		$ec2InstanceIds = Array($this->ReadPropertyString('EC2InstanceId') );
-		var_dump ($ec2InstanceIds);
+		// $ec2InstanceIds = Array($this->ReadPropertyString('EC2InstanceId') );
+		// var_dump ($ec2InstanceIds);
 		
-		$ec2InstanceStatusJson = $ec2Client->DescribeInstanceStatus([
-			'InstanceIds' => $ec2InstanceIds
+		$ec2InstanceStatus = $ec2Client->DescribeInstanceStatus([
+			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
-		
-		var_dump($ec2InstanceStatusJson);
-		
-		$ec2InstanceStatus = json_decode($ec2InstanceStatusJson);
 		
 		var_dump($ec2InstanceStatus);
 	}
