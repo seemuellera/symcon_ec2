@@ -59,7 +59,7 @@ class EC2 extends IPSModule {
 		$form['elements'][] = Array("type" => "NumberSpinner", "name" => "RefreshInterval", "caption" => "Refresh Interval");
 		$form['elements'][] = Array("type" => "CheckBox", "name" => "DebugOutput", "caption" => "Enable Debug Output");
 		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "AWSAccessKeyId", "caption" => "AWS Access Key ID");
-		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "AWSSecretAccessKey", "caption" => "AWS Secret Access Key");
+		$form['elements'][] = Array("type" => "PasswordTextBox", "name" => "AWSSecretAccessKey", "caption" => "AWS Secret Access Key");
 		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "EC2InstanceId", "caption" => "EC2 instance ID");
 				
 		// Add the buttons for the test center
