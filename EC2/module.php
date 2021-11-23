@@ -139,7 +139,11 @@ class EC2 extends IPSModule {
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		print_r($ec2InstanceStatusInformation);
+		if (count($ec2InstanceStatusInformation['InstanceStatuses'] == 0) ) {
+			
+			SetValue($this->GetIDForIdent("Status"), false);
+			return;
+		}
 		
 		$ec2InstanceState = $ec2InstanceStatusInformation['InstanceStatuses'][0]['InstanceState']['Name'];
 		
@@ -148,11 +152,7 @@ class EC2 extends IPSModule {
 		if (in_array($ec2InstanceState, $ec2RunningStates) ) {
 			
 			SetValue($this->GetIDForIdent("Status"), true);
-		}
-		else {
-			
-			SetValue($this->GetIDForIdent("Status"), false);
-		}
+		};
 	}
 	
 	public function Stop() {
