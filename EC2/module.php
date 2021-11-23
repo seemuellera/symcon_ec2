@@ -143,7 +143,7 @@ class EC2 extends IPSModule {
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		var_dump($ec2InstanceStatusInformation->getPath('InstanceStatuses'));
+		var_dump($ec2InstanceStatusInformation->getPath('InstanceStatuses/0'));
 		
 		if ( count($ec2InstanceStatusInformation['InstanceStatuses']) == 0 ) {
 			
