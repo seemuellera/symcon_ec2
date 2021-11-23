@@ -139,7 +139,7 @@ class EC2 extends IPSModule {
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		if (! in_array('InstanceStatuses', $ec2InstanceStatusInformation) ) {
+		if (! has_property($ec2InstanceStatusInformation, 'InstanceStatuses') ) {
 			
 			SetValue($this->GetIDForIdent("Status"), false);
 			return;
