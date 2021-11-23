@@ -116,6 +116,10 @@ class EC2 extends IPSModule {
 					
 					$this->Stop();
 				}
+				
+				sleep(3);
+				$this->RefreshInformation();
+				
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
