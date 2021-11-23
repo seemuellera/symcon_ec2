@@ -126,11 +126,22 @@ class EC2 extends IPSModule {
 			],
 		]);
 		
-		$ec2InstanceStatus = $ec2Client->DescribeInstanceStatus([
+		$ec2InstanceStatusInformation = $ec2Client->DescribeInstanceStatus([
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		var_dump($ec2InstanceStatus['InstanceStatuses'][0]['InstanceState']['Name']);
+		$ec2InstanceState = $ec2InstanceStatusInformation['InstanceStatuses'][0]['InstanceState']['Name'];
+		
+		$ec2RunningStates = Array("running","stopping","shutting-down","pending");
+		
+		if (in_array($ec2InstanceState, $ec2RunningStates) ) {
+			
+			SetValue($this->GetIDForIdent("Status"), true);
+		}
+		else {
+			
+			SetValue($this->GetIDForIdent("Status"), false);
+		}
 	}
 	
 	
