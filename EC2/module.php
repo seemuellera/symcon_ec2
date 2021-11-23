@@ -145,7 +145,7 @@ class EC2 extends IPSModule {
 		
 		print_r($ec2InstanceStatusInformation);
 		
-		if ( count($ec2InstanceStatusInformation['data:Aws\Result:private']['InstanceStatuses']) == 0 ) {
+		if ( count($ec2InstanceStatusInformation->'data:Aws\Result:private'['InstanceStatuses']) == 0 ) {
 			
 			SetValue($this->GetIDForIdent("Status"), false);
 			return;
