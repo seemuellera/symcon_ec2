@@ -108,7 +108,14 @@ class EC2 extends IPSModule {
 		switch ($Ident) {
 		
 			case "Status":
-				SetValue($this->GetIDForIdent($Ident), $Value);
+				if ($Value) {
+					
+					$this->Start();
+				}
+				else {
+					
+					$this->Stop();
+				}
 				break;
 			default:
 				$this->LogMessage("An undefined compare mode was used","CRIT");
@@ -131,6 +138,8 @@ class EC2 extends IPSModule {
 		$ec2InstanceStatusInformation = $ec2Client->DescribeInstanceStatus([
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
+		
+		print_r($ec2InstanceStatusInformation);
 		
 		$ec2InstanceState = $ec2InstanceStatusInformation['InstanceStatuses'][0]['InstanceState']['Name'];
 		
@@ -162,8 +171,7 @@ class EC2 extends IPSModule {
 		$ec2InstanceStopResult = $ec2Client->StopInstances([
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
-		
-		print_r($ec2InstanceStopResult);
+
 	}
 	
 	public function Start() {
@@ -183,6 +191,5 @@ class EC2 extends IPSModule {
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		print_r($ec2InstanceStartResult);
 	}
 }
