@@ -120,8 +120,8 @@ class EC2 extends IPSModule {
 			'version'     => 'latest',
 			'region'      => 'eu-central-1',
 			'credentials' => [
-				'key'    => $this->ReadPropertyString(AWSAccessKeyId),
-				'secret' => $this->ReadPropertyString(AWSSecretAccessKey),
+				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
+				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
 			],
 		]);
 		
