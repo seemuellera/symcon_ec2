@@ -1,0 +1,14 @@
+{
+  "id": "{34B1F7DC-82CA-4648-A9A5-F22B96ADD453}",
+  "name": "EC2",
+  "type": 3,
+  "vendor": "Andreas",
+  "aliases": 
+  [
+	  "EC2"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "EC2"
+}
