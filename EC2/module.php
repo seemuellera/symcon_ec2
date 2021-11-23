@@ -126,7 +126,7 @@ class EC2 extends IPSModule {
 		]);
 		
 		$instanceStatusJson = $ec2Client->DescribeInstanceStatus([
-			'InstanceIds' => $this->ReadPropertyString('EC2InstanceId') 
+			'InstanceIds' => Array( $this->ReadPropertyString('EC2InstanceId') )
 		]);
 		
 		$instanceStatus = json_decode($instanceStatusJson);
