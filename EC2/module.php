@@ -131,7 +131,7 @@ class EC2 extends IPSModule {
 		
 		$instanceStatus = json_decode($instanceStatusJson);
 		
-		print_r($instanceStatus);
+		var_dump($instanceStatus);
 	}
 	
 	
