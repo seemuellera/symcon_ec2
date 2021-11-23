@@ -1,7 +1,7 @@
 <?php
 
 // Load AWS SDK
-require './aws.phar';
+require 'aws.phar';
 use Aws\Ec2\Ec2Client;
 use Aws\Exception\AwsException;
 
