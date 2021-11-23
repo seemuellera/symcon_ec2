@@ -64,6 +64,8 @@ class EC2 extends IPSModule {
 				
 		// Add the buttons for the test center
 		$form['actions'][] = Array(	"type" => "Button", "label" => "Refresh", "onClick" => 'EC2_RefreshInformation($id);');
+		$form['actions'][] = Array(	"type" => "Button", "label" => "Start Instance", "onClick" => 'EC2_Start($id);');
+		$form['actions'][] = Array(	"type" => "Button", "label" => "Stop Instance", "onClick" => 'EC2_Stop($id);');
 		
 		// Return the completed form
 		return json_encode($form);
@@ -144,5 +146,43 @@ class EC2 extends IPSModule {
 		}
 	}
 	
+	public function Stop() {
+		
+		$this->LogMessage("Shutting down EC2 Instance", "DEBUG");
+		
+		$ec2Client = new Ec2Client([
+			'version'     => 'latest',
+			'region'      => 'eu-central-1',
+			'credentials' => [
+				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
+				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
+			],
+		]);
+		
+		$ec2InstanceStopResult = $ec2Client->StopInstances([
+			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
+		]);
+		
+		print_r($ec2InstanceStopResult);
+	}
 	
+	public function Start() {
+		
+		$this->LogMessage("Shutting down EC2 Instance", "DEBUG");
+		
+		$ec2Client = new Ec2Client([
+			'version'     => 'latest',
+			'region'      => 'eu-central-1',
+			'credentials' => [
+				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
+				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
+			],
+		]);
+		
+		$ec2InstanceStartResult = $ec2Client->StartInstances([
+			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
+		]);
+		
+		print_r($ec2InstanceStartResult);
+	}
 }
