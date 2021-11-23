@@ -116,6 +116,7 @@ class EC2 extends IPSModule {
 	public function RefreshInformation() {
 
 		$this->LogMessage("Refresh in Progress", "DEBUG");
+		
 		$ec2Client = new Ec2Client([
 			'version'     => 'latest',
 			'region'      => 'eu-central-1',
@@ -125,13 +126,16 @@ class EC2 extends IPSModule {
 			],
 		]);
 		
-		$instanceStatusJson = $ec2Client->DescribeInstanceStatus([
-			'InstanceIds' => Array( $this->ReadPropertyString('EC2InstanceId') )
+		$ec2InstanceIds = Array($this-ReadPropertyString('EC2InstanceId') );
+		var_dump ($ec2InstanceIds);
+		
+		$ec2InstanceStatusJson = $ec2Client->DescribeInstanceStatus([
+			'InstanceIds' => $ec2InstanceIds
 		]);
 		
-		$instanceStatus = json_decode($instanceStatusJson);
+		$ec2InstanceStatus = json_decode($ec2InstanceStatusJson);
 		
-		var_dump($instanceStatus);
+		var_dump($ec2InstanceStatus);
 	}
 	
 	
