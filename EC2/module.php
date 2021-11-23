@@ -143,15 +143,16 @@ class EC2 extends IPSModule {
 			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
 		]);
 		
-		var_dump($ec2InstanceStatusInformation->getPath('InstanceStatuses/0'));
+		var_dump($ec2InstanceStatusInformation->getPath('InstanceStatuses'));
 		
-		if ( count($ec2InstanceStatusInformation['InstanceStatuses']) == 0 ) {
+		if ( count($ec2InstanceStatusInformation->getPath('InstanceStatuses')) == 0 ) {
 			
 			SetValue($this->GetIDForIdent("Status"), false);
 			return;
 		}
 		
-		$ec2InstanceState = $ec2InstanceStatusInformation['data:Aws\Result:private']['InstanceStatuses'][0]['InstanceState']['Name'];
+		$ec2InstanceStateResponse = $ec2InstanceStatusInformation->getPath('InstanceStatuses');
+		$ec2InstanceState = $ec2InstanceStateResponse[0]['InstanceState']['Name'];
 		
 		$ec2RunningStates = Array("running","stopping","shutting-down","pending");
 		
