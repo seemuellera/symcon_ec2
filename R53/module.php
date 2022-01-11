@@ -130,14 +130,16 @@ class R53 extends IPSModule {
 			'StartRecordName' => $this->ReadPropertyString('RecordName')
 		]);
 		
+		print_r($recordInformation->search('ResourceRecordSets[].Name'));
+		
 		if ( count($recordInformation->getPath('ResourceRecordSets')) == 0 ) {
 			
 			$this->LogMessage("Unable to retrieve the DNS record sets", "ERROR");
 			return false;
 		}
 		
-		print_r($recordInformation->getPath('ResourceRecordSets/0/Name'));
-		print_r($recordInformation->getPath('ResourceRecordSets/0/ResourceRecords/0/Value'));
+		// print_r($recordInformation->getPath('ResourceRecordSets/0/Name'));
+		// nprint_r($recordInformation->getPath('ResourceRecordSets/0/ResourceRecords/0/Value'));
 		
 		
 		/*
