@@ -1,7 +1,7 @@
 <?php
 
 // Load AWS SDK
-require '../libs/aws.phar';
+require_once __DIR__ .  '/../libs/aws.phar';
 use Aws\Ec2\Ec2Client;
 use Aws\Exception\AwsException;
 
