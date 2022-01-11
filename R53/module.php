@@ -172,6 +172,51 @@ class R53 extends IPSModule {
 		}
 		
 		SetValue($this->GetIDForIdent("RecordValue"), $recordValue);
+		
+		if (GetValue($this->GetIDForIdent("RecordValue")) == GetValue($this->GetIDForIdent("RequestedValue")) ) {
+			
+			SetValue($this->GetIDForIdent("InSync"), true);
+		}
+		else {
+			
+			SetValue($this->GetIDForIdent("InSync"), false);
+		}
 	}
 	
+	putblic function UpdateRecord(String $newValue) {
+		
+		
+		$this->LogMessage("Updating DNS record to new value: $newValue", "INFO");
+		
+		$route53Client = new Route53Client([
+			'version'     => 'latest',
+			'region'      => 'eu-central-1',
+			'credentials' => [
+				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
+				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
+			],
+		]);
+		
+		$recordUpdateResult = $route53Client->changeResourceRecordSets([
+			'ChangeBatch' => [
+				'Changes' => [
+					'Action'	=> 'UPSERT',
+					'ResourceRecordSet'	=> [
+						'Name' => $this->ReadPropertyString('RecordName'), 
+						'ResourceRecords' => [
+							'Value' => $newValue
+						],
+						'Type' => $this->ReadPropertyString('RecordType')
+					]
+				]
+			],
+			'HostedZoneId' => $this->ReadPropertyString('HostedZoneId')
+		]);
+		
+		SetValue($this->GetIDForIdent("RequestedValue"), $newValue);
+		
+		IPS_Sleep(500);
+		
+		$this->RefreshInformation();
+	}
 }
