@@ -1,0 +1,14 @@
+{
+  "id": "{8A0D84F4-4728-43D2-A612-A98715DB70E8}",
+  "name": "R53",
+  "type": 3,
+  "vendor": "Andreas",
+  "aliases": 
+  [
+	  "R53"
+  ],
+  "parentRequirements": [],
+  "childRequirements": [],
+  "implemented": [],
+  "prefix": "R53"
+}

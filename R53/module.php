@@ -2,11 +2,11 @@
 
 // Load AWS SDK
 require '../aws.phar';
-use Aws\Ec2\Ec2Client;
+use Aws\Route53\Route53Client;
 use Aws\Exception\AwsException;
 
 // Klassendefinition
-class EC2 extends IPSModule {
+class R53 extends IPSModule {
  
 	// Der Konstruktor des Moduls
 	// Überschreibt den Standard Kontruktor von IPS
@@ -24,21 +24,17 @@ class EC2 extends IPSModule {
 		parent::Create();
 
 		// Properties
-		$this->RegisterPropertyString("Sender","EC2");
+		$this->RegisterPropertyString("Sender","R53");
 		$this->RegisterPropertyBoolean("DebugOutput",false);
 		$this->RegisterPropertyInteger("RefreshInterval",0);
 		$this->RegisterPropertyString("AWSAccessKeyId","XXXXXXXX");
 		$this->RegisterPropertyString("AWSSecretAccessKey","YYYYYYY");
-		$this->RegisterPropertyString("EC2InstanceId","i-xxxxxxxxxxxxx");
-		
-		// Variables
-		$this->RegisterVariableBoolean("Status","Status","~Switch");
-		
-		//Actions
-		$this->EnableAction("Status");
+		$this->RegisterPropertyString("HostedZoneId","xxxxxxxxxxxxx");
+		$this->RegisterPropertyString("RecordType","A,PTR,...");
+		$this->RegisterPropertyString("RecordName","yyyyyyyyyy");
 
 		// Timer
-		$this->RegisterTimer("RefreshInformation", 0 , 'EC2_RefreshInformation($_IPS[\'TARGET\']);');
+		$this->RegisterTimer("RefreshInformation", 0 , 'R53_RefreshInformation($_IPS[\'TARGET\']);');
     }
 
 	public function Destroy() {
@@ -60,12 +56,12 @@ class EC2 extends IPSModule {
 		$form['elements'][] = Array("type" => "CheckBox", "name" => "DebugOutput", "caption" => "Enable Debug Output");
 		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "AWSAccessKeyId", "caption" => "AWS Access Key ID");
 		$form['elements'][] = Array("type" => "PasswordTextBox", "name" => "AWSSecretAccessKey", "caption" => "AWS Secret Access Key");
-		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "EC2InstanceId", "caption" => "EC2 instance ID");
+		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "HostedZoneId", "caption" => "Hosted Zone ID");
+		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "RecordType", "caption" => "Record Type");
+		$form['elements'][] = Array("type" => "ValidationTextBox", "name" => "RecordName", "caption" => "Record Name");
 				
 		// Add the buttons for the test center
-		$form['actions'][] = Array(	"type" => "Button", "label" => "Refresh", "onClick" => 'EC2_RefreshInformation($id);');
-		$form['actions'][] = Array(	"type" => "Button", "label" => "Start Instance", "onClick" => 'EC2_Start($id);');
-		$form['actions'][] = Array(	"type" => "Button", "label" => "Stop Instance", "onClick" => 'EC2_Stop($id);');
+		$form['actions'][] = Array(	"type" => "Button", "label" => "Refresh", "onClick" => 'R53_RefreshInformation($id);');
 		
 		// Return the completed form
 		return json_encode($form);
@@ -108,17 +104,6 @@ class EC2 extends IPSModule {
 		switch ($Ident) {
 		
 			case "Status":
-				if ($Value) {
-					
-					$this->Start();
-				}
-				else {
-					
-					$this->Stop();
-				}
-				
-				sleep(3);
-				$this->RefreshInformation();
 				
 				break;
 			default:
@@ -130,7 +115,7 @@ class EC2 extends IPSModule {
 
 		$this->LogMessage("Refresh in Progress", "DEBUG");
 		
-		$ec2Client = new Ec2Client([
+		$route53Client = new Route53Client([
 			'version'     => 'latest',
 			'region'      => 'eu-central-1',
 			'credentials' => [
@@ -139,10 +124,15 @@ class EC2 extends IPSModule {
 			],
 		]);
 		
-		$ec2InstanceStatusInformation = $ec2Client->DescribeInstanceStatus([
-			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
+		$recordInformation = $route53Client->listResourceRecordSets([
+			'HostedZoneId' => $this->ReadPropertyString('HostedZoneId'),
+			'StartRecordType' => $this->ReadPropertyString('RecordType'),
+			'StartRecordName' => $this->ReadPropertyString('RecordName')
 		]);
 		
+		print_r($recordInformation);
+		
+		/*
 		if ( count($ec2InstanceStatusInformation->getPath('InstanceStatuses')) == 0 ) {
 			
 			SetValue($this->GetIDForIdent("Status"), false);
@@ -158,43 +148,7 @@ class EC2 extends IPSModule {
 			
 			SetValue($this->GetIDForIdent("Status"), true);
 		};
+		*/
 	}
 	
-	public function Stop() {
-		
-		$this->LogMessage("Shutting down EC2 Instance", "DEBUG");
-		
-		$ec2Client = new Ec2Client([
-			'version'     => 'latest',
-			'region'      => 'eu-central-1',
-			'credentials' => [
-				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
-				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
-			],
-		]);
-		
-		$ec2InstanceStopResult = $ec2Client->StopInstances([
-			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
-		]);
-
-	}
-	
-	public function Start() {
-		
-		$this->LogMessage("Shutting down EC2 Instance", "DEBUG");
-		
-		$ec2Client = new Ec2Client([
-			'version'     => 'latest',
-			'region'      => 'eu-central-1',
-			'credentials' => [
-				'key'    => $this->ReadPropertyString('AWSAccessKeyId'),
-				'secret' => $this->ReadPropertyString('AWSSecretAccessKey'),
-			],
-		]);
-		
-		$ec2InstanceStartResult = $ec2Client->StartInstances([
-			'InstanceIds' => [$this->ReadPropertyString('EC2InstanceId')]
-		]);
-		
-	}
 }
