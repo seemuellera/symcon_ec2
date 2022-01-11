@@ -183,7 +183,7 @@ class R53 extends IPSModule {
 		}
 	}
 	
-	public function UpdateRecord(String $newValue) {
+	public function UpdateRecord(String $newValue, Int $newTTL) {
 		
 		
 		$this->LogMessage("Updating DNS record to new value: $newValue", "INFO");
@@ -209,6 +209,7 @@ class R53 extends IPSModule {
 									'Value' => $newValue,
 								],
 							],
+							'TTL' => $newTTL,
 							'Type' => $this->ReadPropertyString('RecordType'),
 						],
 					],
