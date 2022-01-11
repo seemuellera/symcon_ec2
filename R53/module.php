@@ -209,7 +209,7 @@ class R53 extends IPSModule {
 									'Value' => $newValue,
 								],
 							],
-							'Type' => $this->ReadPropertyString('RecordType')
+							'Type' => $this->ReadPropertyString('RecordType'),
 						],
 					],
 				],
