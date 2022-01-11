@@ -200,17 +200,19 @@ class R53 extends IPSModule {
 		$recordUpdateResult = $route53Client->changeResourceRecordSets([
 			'ChangeBatch' => [
 				'Changes' => [
-					'Action'	=> 'UPSERT',
-					'ResourceRecordSet'	=> [
-						'Name' => $this->ReadPropertyString('RecordName'), 
-						'ResourceRecords' => [
-							'Value' => $newValue
+					[
+						'Action'	=> 'UPSERT',
+						'ResourceRecordSet'	=> [
+							'Name' => $this->ReadPropertyString('RecordName'), 
+							'ResourceRecords' => [
+								'Value' => $newValue,
+							],
+							'Type' => $this->ReadPropertyString('RecordType')
 						],
-						'Type' => $this->ReadPropertyString('RecordType')
-					]
-				]
+					],
+				],
 			],
-			'HostedZoneId' => $this->ReadPropertyString('HostedZoneId')
+			'HostedZoneId' => $this->ReadPropertyString('HostedZoneId'),
 		]);
 		
 		SetValue($this->GetIDForIdent("RequestedValue"), $newValue);
