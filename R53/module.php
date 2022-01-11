@@ -1,7 +1,7 @@
 <?php
 
 // Load AWS SDK
-require_once __DIR__ .  '/../libs/aws.phar';
+require_once __DIR__ .  '/aws.phar';
 use Aws\Route53\Route53Client;
 use Aws\Exception\AwsException;
 
