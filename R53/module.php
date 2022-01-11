@@ -183,7 +183,7 @@ class R53 extends IPSModule {
 		}
 	}
 	
-	putblic function UpdateRecord(String $newValue) {
+	public function UpdateRecord(String $newValue) {
 		
 		
 		$this->LogMessage("Updating DNS record to new value: $newValue", "INFO");
