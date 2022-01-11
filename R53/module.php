@@ -32,6 +32,11 @@ class R53 extends IPSModule {
 		$this->RegisterPropertyString("HostedZoneId","xxxxxxxxxxxxx");
 		$this->RegisterPropertyString("RecordType","A,PTR,...");
 		$this->RegisterPropertyString("RecordName","yyyyyyyyyy");
+		
+		// Variables
+		$this->RegisterVariableString("RecordValue","Record Value");
+		$this->RegisterVariableString("RequestedValue","Requested Value");
+		$this->RegisterVariableBoolean("InSync", "In Sync", "~Alert.Reversed");
 
 		// Timer
 		$this->RegisterTimer("RefreshInformation", 0 , 'R53_RefreshInformation($_IPS[\'TARGET\']);');
@@ -134,7 +139,7 @@ class R53 extends IPSModule {
 		
 		if (count($records) == 0) {
 			
-			$this->LogMessage("Unable to retrieve the DNS record sets", "ERROR");
+			$this->LogMessage("Unable to retrieve the DNS record sets", "CRIT");
 			return false;
 		}
 		
@@ -146,13 +151,13 @@ class R53 extends IPSModule {
 				
 				if (count($record['ResourceRecords']) == 0) {
 					
-					$this->LogMessage("No Record value found", "ERROR");
+					$this->LogMessage("No Record value found", "CRIT");
 					return false;
 				}
 				
 				if (count($record['ResourceRecords']) > 1) {
 					
-					$this->LogMessage("Multi-Value record found", "ERROR");
+					$this->LogMessage("Multi-Value record found", "CRIT");
 					return false;
 				}
 				
@@ -162,33 +167,11 @@ class R53 extends IPSModule {
 		
 		if ($recordValue == "") {
 			
-			$this->LogMessage("No Record Set with the given name was found","ERROR");
+			$this->LogMessage("No Record Set with the given name was found","CRIT");
 			return false;
 		}
 		
-		print_r($recordValue);
-		
-		// print_r($recordInformation->getPath('ResourceRecordSets/0/Name'));
-		// nprint_r($recordInformation->getPath('ResourceRecordSets/0/ResourceRecords/0/Value'));
-		
-		
-		/*
-		if ( count($ec2InstanceStatusInformation->getPath('InstanceStatuses')) == 0 ) {
-			
-			SetValue($this->GetIDForIdent("Status"), false);
-			return;
-		}
-		
-		$ec2InstanceStateResponse = $ec2InstanceStatusInformation->getPath('InstanceStatuses');
-		$ec2InstanceState = $ec2InstanceStateResponse[0]['InstanceState']['Name'];
-		
-		$ec2RunningStates = Array("running","stopping","shutting-down","pending");
-		
-		if (in_array($ec2InstanceState, $ec2RunningStates) ) {
-			
-			SetValue($this->GetIDForIdent("Status"), true);
-		};
-		*/
+		SetValue($this->GetIDForIdent("RecordValue"), $recordValue);
 	}
 	
 }
