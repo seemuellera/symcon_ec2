@@ -1,7 +1,7 @@
 <?php
 
 // Load AWS SDK
-require '../aws.phar';
+require '../libs/aws.phar';
 use Aws\Route53\Route53Client;
 use Aws\Exception\AwsException;
 
