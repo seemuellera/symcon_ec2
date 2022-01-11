@@ -138,13 +138,35 @@ class R53 extends IPSModule {
 			return false;
 		}
 		
+		$recordValue = "";
+		
 		foreach ($records as $record) {
 			
 			if ($record['Name'] == $this->ReadPropertyString('RecordName') ) {
 				
-				print_r($record);
+				if (count($record['ResourceRecords']) == 0) {
+					
+					$this->LogMessage("No Record value found", "ERROR");
+					return false;
+				}
+				
+				if (count($record['ResourceRecords']) > 1) {
+					
+					$this->LogMessage("Multi-Value record found", "ERROR");
+					return false;
+				}
+				
+				$recordValue = $record['ResourceRecords'][0]['Value'];
 			}
 		}
+		
+		if ($recordValue == "") {
+			
+			$this->LogMessage("No Record Set with the given name was found","ERROR");
+			return false;
+		}
+		
+		print_r($recordValue);
 		
 		// print_r($recordInformation->getPath('ResourceRecordSets/0/Name'));
 		// nprint_r($recordInformation->getPath('ResourceRecordSets/0/ResourceRecords/0/Value'));
