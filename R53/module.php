@@ -205,7 +205,9 @@ class R53 extends IPSModule {
 						'ResourceRecordSet'	=> [
 							'Name' => $this->ReadPropertyString('RecordName'), 
 							'ResourceRecords' => [
-								'Value' => $newValue,
+								[
+									'Value' => $newValue,
+								],
 							],
 							'Type' => $this->ReadPropertyString('RecordType')
 						],
